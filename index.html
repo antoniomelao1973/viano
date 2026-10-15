@@ -1,12 +1,3 @@
-<?php
-declare(strict_types=1);
-require_once __DIR__ . '/config.php';
-$user = $_SESSION['user'] ?? null;
-if (is_array($user)) {
-    header('Location: ' . (($user['perfil'] ?? '') === 'gestor' ? 'manager.php' : 'driver.php'));
-    exit;
-}
-?>
 <!doctype html>
 <html lang="pt-PT">
 <head>

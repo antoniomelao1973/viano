@@ -39,7 +39,7 @@ document.querySelectorAll('[data-logout]').forEach((button) => {
         body: JSON.stringify({ action: 'logout' }),
       });
     } finally {
-      window.location.assign('index.php');
+      window.location.assign('index.html');
     }
   });
 });
