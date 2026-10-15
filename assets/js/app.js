@@ -20,14 +20,23 @@ async function initializeAccessPage() {
   }
 
   if (result.managerSetupNeeded) {
-    setupForm.hidden = false;
-  } else {
-    loginForm.hidden = false;
+    document.querySelector('#show-setup').hidden = false;
   }
+  loginForm.hidden = false;
 }
 
 initializeAccessPage().catch(() => {
   if (loginForm) loginForm.hidden = false;
+});
+
+document.querySelector('#show-setup')?.addEventListener('click', () => {
+  loginForm.hidden = true;
+  setupForm.hidden = false;
+});
+
+document.querySelector('#show-login')?.addEventListener('click', () => {
+  setupForm.hidden = true;
+  loginForm.hidden = false;
 });
 
 loginForm?.addEventListener('submit', async (event) => {
