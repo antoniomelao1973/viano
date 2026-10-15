@@ -4,12 +4,59 @@ require_once dirname(__DIR__) . '/config.php';
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'GET') {
     $user = $_SESSION['user'] ?? null;
-    json_response(['user' => $user, 'csrf' => csrf_token()]);
+    $managers = db()->query("SELECT COUNT(*) FROM utilizadores WHERE perfil = 'gestor'")->fetchColumn();
+    json_response(['user' => $user, 'csrf' => csrf_token(), 'managerSetupNeeded' => (int) $managers === 0]);
 }
 
 require_method('POST');
 $input = json_input();
 $action = $input['action'] ?? 'login';
+
+if ($action === 'setup_manager') {
+    require_csrf();
+
+    $name = trim((string) ($input['nome'] ?? ''));
+    $email = filter_var(trim((string) ($input['email'] ?? '')), FILTER_VALIDATE_EMAIL);
+    $password = $input['password'] ?? '';
+    if ($name === '' || strlen($name) > 120 || !$email || strlen($email) > 190
+        || !is_string($password) || strlen($password) < 12 || strlen($password) > 4096) {
+        json_response(['error' => 'Indique um nome, email válido e palavra-passe com pelo menos 12 caracteres.'], 422);
+    }
+
+    $database = db();
+    if ((int) $database->query("SELECT GET_LOCK('viano_first_manager_setup', 10)")->fetchColumn() !== 1) {
+        json_response(['error' => 'Não foi possível iniciar o registo. Tente novamente.'], 503);
+    }
+
+    try {
+        $managers = $database->query("SELECT COUNT(*) FROM utilizadores WHERE perfil = 'gestor'")->fetchColumn();
+        if ((int) $managers > 0) {
+            json_response(['error' => 'O registo inicial já foi concluído.'], 409);
+        }
+
+        $insert = $database->prepare(
+            "INSERT INTO utilizadores (nome, email, password_hash, perfil) VALUES (:nome, :email, :password_hash, 'gestor')"
+        );
+        $insert->execute([
+            'nome' => $name,
+            'email' => $email,
+            'password_hash' => password_hash($password, PASSWORD_DEFAULT),
+        ]);
+
+        $user = [
+            'id' => (int) $database->lastInsertId(),
+            'nome' => $name,
+            'email' => $email,
+            'perfil' => 'gestor',
+        ];
+        session_regenerate_id(true);
+        $_SESSION['user'] = $user;
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        json_response(['user' => $user, 'csrf' => csrf_token()]);
+    } finally {
+        $database->query("SELECT RELEASE_LOCK('viano_first_manager_setup')");
+    }
+}
 
 if ($action === 'login') {
     $email = filter_var(trim((string) ($input['email'] ?? '')), FILTER_VALIDATE_EMAIL);

@@ -14,14 +14,15 @@ if (!is_array($user) || ($user['perfil'] ?? '') !== 'gestor') {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#173d32">
   <title>Viano | Centro de operações</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="assets/css/viano.css" rel="stylesheet">
+  <script src="assets/js/tailwind-config.js"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
 </head>
-<body>
-  <div class="layout" id="manager-app" data-csrf="<?= h(csrf_token()) ?>" data-maps-key="<?= h(google_browser_key()) ?>">
+<body class="antialiased">
+  <div class="layout min-h-screen" id="manager-app" data-csrf="<?= h(csrf_token()) ?>" data-maps-key="<?= h(google_browser_key()) ?>">
     <aside class="sidebar">
-      <a class="brand text-decoration-none" href="manager.php"><span class="brand-mark">V</span><span class="brand-name">viano</span></a>
+      <a class="brand no-underline" href="manager.php"><span class="brand-mark">V</span><span class="brand-name">viano</span></a>
       <p class="side-label">Operações</p>
       <nav aria-label="Navegação principal">
         <a class="side-link active" href="#overview"><i class="bi bi-grid-1x2 side-icon" aria-hidden="true"></i> Visão geral</a>

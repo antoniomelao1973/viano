@@ -14,15 +14,16 @@ if (!is_array($user) || ($user['perfil'] ?? '') !== 'entregador') {
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#173d32">
   <title>Viano | A minha rota</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="assets/css/viano.css" rel="stylesheet">
+  <script src="assets/js/tailwind-config.js"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
 </head>
-<body>
-  <main class="driver-main" id="driver-app" data-csrf="<?= h(csrf_token()) ?>">
+<body class="antialiased">
+  <main class="driver-main min-h-screen" id="driver-app" data-csrf="<?= h(csrf_token()) ?>">
     <header class="driver-header">
-      <a class="brand text-decoration-none" href="driver.php"><span class="brand-mark">V</span><span class="brand-name">viano</span></a>
-      <div class="user-row"><div class="user-meta text-end"><strong><?= h($user['nome']) ?></strong><span>Estafeta</span></div><button class="logout-icon" type="button" data-logout title="Terminar sessão" aria-label="Terminar sessão"><i class="bi bi-box-arrow-right" aria-hidden="true"></i></button></div>
+      <a class="brand no-underline" href="driver.php"><span class="brand-mark">V</span><span class="brand-name">viano</span></a>
+      <div class="user-row"><div class="user-meta text-right"><strong><?= h($user['nome']) ?></strong><span>Estafeta</span></div><button class="logout-icon" type="button" data-logout title="Terminar sessão" aria-label="Terminar sessão"><i class="bi bi-box-arrow-right" aria-hidden="true"></i></button></div>
     </header>
     <section class="driver-hero">
       <p class="eyebrow">A minha rota</p>
