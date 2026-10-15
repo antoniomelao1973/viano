@@ -19,9 +19,6 @@ async function initializeAccessPage() {
     return;
   }
 
-  if (result.managerSetupNeeded) {
-    document.querySelector('#show-setup').hidden = false;
-  }
   loginForm.hidden = false;
 }
 
@@ -29,9 +26,32 @@ initializeAccessPage().catch(() => {
   if (loginForm) loginForm.hidden = false;
 });
 
-document.querySelector('#show-setup')?.addEventListener('click', () => {
-  loginForm.hidden = true;
-  setupForm.hidden = false;
+document.querySelector('#show-setup')?.addEventListener('click', async (event) => {
+  const button = event.currentTarget;
+  const notice = document.querySelector('#login-notice');
+  button.disabled = true;
+  notice.textContent = 'A verificar o primeiro acesso…';
+  notice.className = 'notice';
+  try {
+    const result = await requestJson('api/auth.php');
+    csrfToken = result.csrf;
+    if (result.user) {
+      window.location.assign(result.user.perfil === 'gestor' ? 'manager.php' : 'driver.php');
+      return;
+    }
+    if (!result.managerSetupNeeded) {
+      notice.textContent = 'O registo inicial já foi concluído.';
+      notice.className = 'notice error';
+      return;
+    }
+    loginForm.hidden = true;
+    setupForm.hidden = false;
+  } catch (error) {
+    notice.textContent = error.message;
+    notice.className = 'notice error';
+  } finally {
+    button.disabled = false;
+  }
 });
 
 document.querySelector('#show-login')?.addEventListener('click', () => {
