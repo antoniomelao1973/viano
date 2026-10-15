@@ -1,0 +1,54 @@
+<?php
+declare(strict_types=1);
+require_once __DIR__ . '/config.php';
+$user = $_SESSION['user'] ?? null;
+if (is_array($user)) {
+    header('Location: ' . (($user['perfil'] ?? '') === 'gestor' ? 'manager.php' : 'driver.php'));
+    exit;
+}
+?>
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173d32">
+  <title>Viano | Acesso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="assets/css/viano.css" rel="stylesheet">
+</head>
+<body>
+  <main class="login-shell">
+    <section class="login-art" aria-label="Viano">
+      <div class="brand"><span class="brand-mark">V</span><span class="brand-name">viano</span></div>
+      <div class="login-copy">
+        <p class="eyebrow">Operações em movimento</p>
+        <h1>Entregas certas.<br>Rotas mais inteligentes.</h1>
+        <p>Planeie percursos, acompanhe cada paragem e mantenha a equipa sempre em sintonia.</p>
+      </div>
+      <span class="login-foot">Gestão de entregas, num só lugar.</span>
+      <span class="login-mark-mobile">Gestão de entregas, num só lugar.</span>
+    </section>
+    <section class="login-form-side">
+      <form class="login-form" id="login-form">
+        <h2>Entrar na plataforma</h2>
+        <p>Use as credenciais da sua conta Viano.</p>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="username" required maxlength="190">
+        </div>
+        <div class="field">
+          <label for="password">Palavra-passe</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <p class="notice" id="login-notice" role="status" aria-live="polite"></p>
+        <button class="button button-primary" type="submit">Entrar <i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+      </form>
+    </section>
+  </main>
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>

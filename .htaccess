@@ -1,0 +1,10 @@
+Options -Indexes
+
+<FilesMatch "^(viano_db\.sql|README\.md|\.env)$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule (^|/)\.git(?:/|$) - [F,L]
+</IfModule>
